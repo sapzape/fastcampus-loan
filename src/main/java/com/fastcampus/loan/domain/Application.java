@@ -41,13 +41,13 @@ public class Application extends BaseEntity {
   @Column(columnDefinition = "varchar(50) DEFAULT NULL COMMENT '신청자 이메일'")
   private String email;
 
-  @Column(columnDefinition = "decimal(5,4) NOT NULL COMMENT '금리'")
+  @Column(columnDefinition = "decimal(5,4) DEFAULT NULL COMMENT '금리'")
   private BigDecimal interestRate;
 
-  @Column(columnDefinition = "decimal(5,4) NOT NULL COMMENT '취급수수료'")
+  @Column(columnDefinition = "decimal(5,4) DEFAULT NULL COMMENT '취급수수료'")
   private BigDecimal fee;
 
-  @Column(columnDefinition = "datetime NOT NULL COMMENT '만기'")
+  @Column(columnDefinition = "datetime DEFAULT NULL COMMENT '만기'")
   private LocalDateTime maturity;
 
   @Column(columnDefinition = "decimal(15,2) DEFAULT NULL COMMENT '대출 신청 금액'")
