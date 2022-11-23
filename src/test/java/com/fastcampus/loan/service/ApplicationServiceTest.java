@@ -8,6 +8,7 @@ import com.fastcampus.loan.dto.ApplicationDTO.Request;
 import com.fastcampus.loan.dto.ApplicationDTO.Response;
 import com.fastcampus.loan.repository.ApplicationRepository;
 import java.math.BigDecimal;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -50,5 +51,20 @@ public class ApplicationServiceTest {
     Response actual = applicationService.create(request);
 
     assertThat(actual.getName()).isSameAs(entity.getName());
+  }
+
+  @Test
+  void Should_ReturnResponseOfExistApplicationEntity_When_RequestExistApplicationId() {
+    Long findId = 1L;
+
+    Application entity = Application.builder()
+        .applicationId(1L)
+        .build();
+
+    when(applicationRepository.findById(findId)).thenReturn(Optional.ofNullable(entity));
+
+    Response actual = applicationService.get(1L);
+
+    assertThat(actual.getApplicationId()).isSameAs(findId);
   }
 }
