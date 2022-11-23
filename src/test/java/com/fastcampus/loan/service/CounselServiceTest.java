@@ -106,7 +106,7 @@ public class CounselServiceTest {
     assertThat(actual.getCounselId()).isSameAs(findId);
     assertThat(actual.getName()).isSameAs(request.getName());
   }
-제
+
   @Test
   void Should_DeletedCounselEntity_When_RequestDeleteExistCounselInfo() {
     Long targetId = 1L;
