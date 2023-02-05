@@ -63,26 +63,26 @@ public class ApplicationController extends AbstractController {
 
   @PostMapping(value = "/{applicationId}/files")
   public ResponseDTO<Void> upload(@PathVariable Long applicationId, MultipartFile file) throws IllegalStateException, IOException {
-    fileStorageService.save(file);
+    fileStorageService.save(applicationId, file);
     return ok();
   }
 
   @GetMapping("/{applicationId}/files")
   public ResponseEntity<Resource> download(@PathVariable Long applicationId, @RequestParam(value="filename") String filename) throws IllegalStateException, IOException {
-    Resource file = fileStorageService.load(filename);
+    Resource file = fileStorageService.load(applicationId, filename);
     return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
         "attachment; filename=\"" + file.getFilename() + "\"").body(file);
   }
 
   @DeleteMapping("/{applicationId}/files")
   public ResponseDTO<Void> deleteAll(@PathVariable Long applicationId) {
-    fileStorageService.deleteAll();
+    fileStorageService.deleteAll(applicationId);
     return ok();
   }
 
-  @GetMapping("/{applicationId}/files/info")
+  @GetMapping("/{applicationId}/files/infos")
   public ResponseDTO<List<FileDTO>> getFileInfos(@PathVariable Long applicationId) {
-    List<FileDTO> fileInfos = fileStorageService.loadAll().map(path -> {
+    List<FileDTO> fileInfos = fileStorageService.loadAll(applicationId).map(path -> {
       String fileName= path.getFileName().toString();
       return FileDTO.builder()
           .name(fileName)
