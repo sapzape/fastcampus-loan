@@ -32,7 +32,7 @@ public class EntryServiceImpl implements EntryService {
   @Transactional
   @Override
   public Response create(Long applicationId, Request request) {
-    if (!isContractApplication(applicationId)) {
+    if (!isContractedApplication(applicationId)) {
       throw new BaseException(ResultType.SYSTEM_ERROR);
     }
 
@@ -106,12 +106,12 @@ public class EntryServiceImpl implements EntryService {
     );
   }
 
-  private boolean isContractApplication(Long applicationId) {
+  private boolean isContractedApplication(Long applicationId) {
     Optional<Application> existed = applicationRepository.findById(applicationId);
     if (existed.isEmpty()) {
       return false;
     }
 
-    return existed.get().getContractAt() != null;
+    return existed.get().getContractedAt() != null;
   }
 }

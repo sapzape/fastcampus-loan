@@ -135,7 +135,7 @@ public class ApplicationServiceImpl implements ApplicationService {
       throw new BaseException(ResultType.SYSTEM_ERROR);
     }
 
-    application.setContractAt(LocalDateTime.now());
+    application.setContractedAt(LocalDateTime.now());
 
     Application updated = applicationRepository.save(application);
 
