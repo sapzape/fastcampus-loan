@@ -62,7 +62,7 @@ public class ApplicationController extends AbstractController {
   }
 
   @PostMapping(value = "/{applicationId}/files")
-  public ResponseDTO<Void> upload(@PathVariable Long applicationId, MultipartFile file) throws IllegalStateException, IOException {
+  public ResponseDTO<Void> upload(@PathVariable Long applicationId, MultipartFile file) throws IllegalStateException {
     fileStorageService.save(applicationId, file);
     return ok();
   }
@@ -80,7 +80,7 @@ public class ApplicationController extends AbstractController {
     return ok();
   }
 
-  @GetMapping("/{applicationId}/files/infos")
+  @GetMapping("/{applicationId}/files/info")
   public ResponseDTO<List<FileDTO>> getFileInfos(@PathVariable Long applicationId) {
     List<FileDTO> fileInfos = fileStorageService.loadAll(applicationId).map(path -> {
       String fileName= path.getFileName().toString();

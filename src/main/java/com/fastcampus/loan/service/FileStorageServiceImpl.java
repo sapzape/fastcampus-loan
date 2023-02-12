@@ -84,7 +84,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     try {
       String applicationPath = uploadPath.concat("/" + applicationId);
-      return Files.walk(Paths.get(applicationPath), 1).filter(path -> !path.equals(Paths.get(uploadPath)));
+      return Files.walk(Paths.get(applicationPath), 1).filter(path -> !path.equals(Paths.get(applicationPath)));
     } catch (IOException e) {
       throw new BaseException(ResultType.SYSTEM_ERROR);
     }
