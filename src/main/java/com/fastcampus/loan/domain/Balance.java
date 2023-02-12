@@ -24,22 +24,16 @@ import org.hibernate.annotations.Where;
 @DynamicInsert
 @DynamicUpdate
 @Where(clause = "is_deleted=false")
-public class Judgment extends BaseEntity {
+public class Balance extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
-  private Long judgmentId;
+  private Long balanceId;
 
   @Column(columnDefinition = "bigint NOT NULL COMMENT '신청 ID'")
   private Long applicationId;
 
-  @Column(columnDefinition = "varchar(12) DEFAULT NULL COMMENT '심사자'")
-  private String name;
-
-  @Column(columnDefinition = "decimal(15,2) DEFAULT NULL COMMENT '승인 금액'")
-  private BigDecimal approvalAmount;
-
-  @Column(columnDefinition = "decimal(5,4) DEFAULT NULL COMMENT '승인 금리'")
-  private BigDecimal approvalInterestRate;
+  @Column(columnDefinition = "decimal(15,2) NOT NULL COMMENT '잔여 대출 금액'")
+  private BigDecimal balance;
 }
