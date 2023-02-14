@@ -8,6 +8,7 @@ import com.fastcampus.loan.exception.BaseException;
 import com.fastcampus.loan.exception.ResultType;
 import com.fastcampus.loan.repository.BalanceRepository;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -22,16 +23,19 @@ public class BalanceServiceImpl implements BalanceService {
 
   @Override
   public Response create(Long applicationId, CreateRequest request) {
-    if (balanceRepository.findAllByApplicationId(applicationId).isPresent()) {
-      throw new BaseException(ResultType.SYSTEM_ERROR);
-    }
-
     Balance balance = modelMapper.map(request, Balance.class);
 
     // 첫 생성은 entry amount 를 balance
     BigDecimal entryAmount = request.getEntryAmount();
     balance.setApplicationId(applicationId);
     balance.setBalance(entryAmount);
+
+    balanceRepository.findAllByApplicationId(applicationId).ifPresent(b -> {
+      balance.setBalanceId(b.getBalanceId());
+      balance.setIsDeleted(b.getIsDeleted());
+      balance.setCreatedAt(b.getCreatedAt());
+      balance.setUpdatedAt(LocalDateTime.now());
+    });
 
     Balance saved = balanceRepository.save(balance);
 
