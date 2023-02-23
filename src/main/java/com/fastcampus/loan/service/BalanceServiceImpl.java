@@ -2,6 +2,8 @@ package com.fastcampus.loan.service;
 
 import com.fastcampus.loan.domain.Balance;
 import com.fastcampus.loan.dto.BalanceDTO.CreateRequest;
+import com.fastcampus.loan.dto.BalanceDTO.RepaymentRequest;
+import com.fastcampus.loan.dto.BalanceDTO.RepaymentRequest.RepaymentType;
 import com.fastcampus.loan.dto.BalanceDTO.Response;
 import com.fastcampus.loan.dto.BalanceDTO.UpdateRequest;
 import com.fastcampus.loan.exception.BaseException;
@@ -30,7 +32,7 @@ public class BalanceServiceImpl implements BalanceService {
     balance.setApplicationId(applicationId);
     balance.setBalance(entryAmount);
 
-    balanceRepository.findAllByApplicationId(applicationId).ifPresent(b -> {
+    balanceRepository.findByApplicationId(applicationId).ifPresent(b -> {
       balance.setBalanceId(b.getBalanceId());
       balance.setIsDeleted(b.getIsDeleted());
       balance.setCreatedAt(b.getCreatedAt());
@@ -53,7 +55,7 @@ public class BalanceServiceImpl implements BalanceService {
 
   @Override
   public Response update(Long applicationId, UpdateRequest request) {
-    Balance balance = balanceRepository.findAllByApplicationId(applicationId).orElseThrow(() -> {
+    Balance balance = balanceRepository.findByApplicationId(applicationId).orElseThrow(() -> {
       throw new BaseException(ResultType.SYSTEM_ERROR);
     });
 
@@ -70,8 +72,30 @@ public class BalanceServiceImpl implements BalanceService {
   }
 
   @Override
+  public Response repaymentUpdate(Long applicationId, RepaymentRequest request) {
+    Balance balance = balanceRepository.findByApplicationId(applicationId).orElseThrow(() -> {
+      throw new BaseException(ResultType.SYSTEM_ERROR);
+    });
+
+    BigDecimal updatedBalance = balance.getBalance();
+    BigDecimal repaymentAmount = request.getRepaymentAmount();
+
+    if (request.getType().equals(RepaymentType.ADD)) {
+      updatedBalance = updatedBalance.add(repaymentAmount);
+    } else {
+      updatedBalance = updatedBalance.subtract(repaymentAmount);
+    }
+
+    balance.setBalance(updatedBalance);
+
+    Balance updated = balanceRepository.save(balance);
+
+    return modelMapper.map(updated, Response.class);
+  }
+
+  @Override
   public void delete(Long applicationId) {
-    Balance balance = balanceRepository.findAllByApplicationId(applicationId).orElseThrow(() -> {
+    Balance balance = balanceRepository.findByApplicationId(applicationId).orElseThrow(() -> {
       throw new BaseException(ResultType.SYSTEM_ERROR);
     });
 
