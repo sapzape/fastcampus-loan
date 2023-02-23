@@ -80,8 +80,6 @@ public class BalanceServiceImpl implements BalanceService {
     BigDecimal updatedBalance = balance.getBalance();
     BigDecimal repaymentAmount = request.getRepaymentAmount();
 
-    // 상환 정상: balance - repaymentAmount
-    // 상환금 롤백 : balance + repaymentAmount
     if (request.getType().equals(RepaymentType.ADD)) {
       updatedBalance = updatedBalance.add(repaymentAmount);
     } else {
