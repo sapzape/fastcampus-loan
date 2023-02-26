@@ -1,0 +1,6 @@
+apiVersion: skaffold/v4beta2
+kind: Config
+build:
+  artifacts:
+    - image: fastcampus-loan
+      jib: {}

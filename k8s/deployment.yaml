@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastcampus-loan
+spec:
+  selector:
+    matchLabels:
+      app: fastcampus-loan
+  template:
+    metadata:
+      labels:
+        app: fastcampus-loan
+    spec:
+      containers:
+        - name: fastcampus-loan
+          image: fastcampus-loan
+          ports:
+            - containerPort: 8080

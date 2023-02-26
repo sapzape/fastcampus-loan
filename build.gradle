@@ -1,6 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.7.1'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'com.google.cloud.tools.jib' version '3.2.0'
     id 'java'
 }
 
@@ -11,6 +12,24 @@ sourceCompatibility = '11'
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
+    }
+}
+
+jib {
+    from {
+        image = 'openjdk:11-jre-slim'
+    }
+    to {
+        image = 'fastcampus-loan'
+        tags = ['0.0.1']
+    }
+    container {
+        mainClass = 'com.fastcampus.loan.LoanApplication'
+        format = 'OCI'
+        volumes = ['/var/tmp']
+        entrypoint = ['java'
+                      , '-cp', '/app/resources:/app/classes:/app/libs/*'
+                      , 'com.fastcampus.loan.LoanApplication']
     }
 }
 
@@ -26,7 +45,6 @@ dependencies {
 
     runtimeOnly 'mysql:mysql-connector-java'
 
-    compileOnly 'com.h2database:h2'
     compileOnly 'org.projectlombok:lombok'
 
     annotationProcessor 'org.projectlombok:lombok'

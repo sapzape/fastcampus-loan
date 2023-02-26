@@ -2,9 +2,9 @@ server:
   port: 8080
 spring:
   datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:testdb
-    username: sa
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://host.docker.internal:3306/loan?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: root
     password:
   jpa:
     hibernate:
@@ -14,11 +14,8 @@ spring:
         format_sql: true
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-    database-platform: org.hibernate.dialect.H2Dialect
-  h2:
-    console:
-      path: /h2-console
-      enabled: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect # 추가 해준 부분
   servlet:
     multipart:
       max-file-size: 10MB
